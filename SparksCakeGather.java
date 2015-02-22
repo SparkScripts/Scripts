@@ -1,8 +1,15 @@
-package scripts.cakegather.nodes;
+package scripts.cakegather;
+
+import java.awt.*;
+import java.awt.Color;
+import java.awt.Font;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import org.tribot.api.Timing;
+import org.tribot.script.interfaces.Painting;
 
 import org.tribot.api.DynamicClicking;
 import org.tribot.api.General;
-import org.tribot.api.Timing;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Inventory;
@@ -17,8 +24,8 @@ import org.tribot.api2007.types.RSTile;
 import org.tribot.script.Script;
 import org.tribot.script.ScriptManifest;
 
-@ScriptManifest(authors = { "§park" }, category = "Tools", name = "SparksCakeWalk")
-public class SparksCakeGather extends Script {
+@ScriptManifest(authors = { "§park" }, category = "Tools", name = "SparksCakeWalk", description = "Picks up sclieces of cake from birthday cake in Varrock Square.")
+public class SparksCakeGather extends Script implements Painting {
 
 	RSTile cake_tile = null;
 
@@ -76,7 +83,7 @@ public class SparksCakeGather extends Script {
 	}
 
 	private boolean takeCake() {
-	General.useAntiBanCompliance(true);
+		General.useAntiBanCompliance(true);
 		if (isTakingCake()) {
 			final long timeout = System.currentTimeMillis()
 					+ General.random(60000, 80000);
@@ -127,47 +134,87 @@ public class SparksCakeGather extends Script {
 		return false;
 	}
 
-	private boolean bank(){ 
-	General.useAntiBanCompliance(true);
-		if(!Banking.isBankScreenOpen()){
-			if(!Banking.openBank())
+	private boolean bank() {
+		General.useAntiBanCompliance(true);
+		if (!Banking.isBankScreenOpen()) {
+			if (!Banking.openBank())
 				return false;
 		}
-		if(Banking.depositAll() < 1){
+		if (Banking.depositAll() < 1) {
 			return false;
 		}
 		return Timing.waitCondition(new Condition() {
-			
+
 			@Override
 			public boolean active() {
 				return !Inventory.isFull();
 			}
 		}, General.random(3000, 4000));
 	}
-	
-	@Override
 
+	@Override
 	public void run() {
-		while(true){
+		while (true) {
 			sleep(125);
-			if(isAtCake()){
-				if(Inventory.isFull()){
+			if (isAtCake()) {
+				if (Inventory.isFull()) {
 					walkToBank();
 				} else
 					takeCake();
-			} else if (isInBank()){
-				if(Inventory.isFull())
+			} else if (isInBank()) {
+				if (Inventory.isFull())
 					bank();
 				else {
 					walkToCake();
 				}
 			} else {
-				if(Inventory.isFull())
+				if (Inventory.isFull())
 					walkToBank();
 				else
 					walkToCake();
 			}
 		}
+
+	}
+
+	public int cakes =  0;
+		
+	private final Color color1 = new Color(153, 153, 255);
+	private final Color color2 = new Color(0, 0, 0);
+	private final Color color3 = new Color(255, 255, 255);
+	private final Color color4 = new Color(255, 0, 51);
+
+	private final BasicStroke stroke1 = new BasicStroke(1);
+
+	private final Font font1 = new Font("Arial", 1, 28);
+	private final Font font2 = new Font("Arial", 1, 22);
+	private final Font font3 = new Font("Arial", 1, 12);
+
+	private static final long startTime = System.currentTimeMillis();
+	public void onPaint(Graphics g1) {
+		long timeRan = System.currentTimeMillis() - startTime;
+		Graphics2D g = (Graphics2D) g1;
+		
+
+		g.setColor(color1);
+		g.fillRoundRect(11, 348, 483, 108, 16, 16);
+		g.setColor(color2);
+		g.setStroke(stroke1);
+		g.drawRoundRect(11, 348, 483, 108, 16, 16);
+		g.setFont(font1);
+		g.setColor(color3);
+		g.drawString("§parksCakeGather", 16, 375);
+		g.setColor(color4);
+		g.fillOval(471, 357, 17, 17);
+		g.setColor(color2);
+		g.drawOval(471, 357, 17, 17);
+		g.setFont(font2);
+		g.setColor(color3);
+		//g.drawString("Cake Gathered:" , 21, 414);
+		//g.drawString("Cake per/h:" , 267, 413);
+		g.drawString("Run Time: " + Timing.msToString(timeRan), 20, 446);
+		g.setFont(font3);
+		g.drawString("Version: 1.0", 422, 451);
 
 	}
 
