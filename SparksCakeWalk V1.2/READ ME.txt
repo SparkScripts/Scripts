@@ -1,0 +1,3 @@
+Save both of these files into your scripts folder
+.tribot>src>scripts
+
