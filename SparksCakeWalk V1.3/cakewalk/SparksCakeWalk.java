@@ -22,7 +22,7 @@ import org.tribot.script.ScriptManifest;
 import scripts.InventoryListener.InventoryListener;
 import scripts.InventoryListener.InventoryObserver;
 
-@ScriptManifest(authors = { "§park" }, category = "Tools", name = "SparksCakeWalk", description = "Picks up sclieces of cake from birthday cake in Varrock Square.", version = 1.3)
+@ScriptManifest(authors = { "Â§park" }, category = "Tools", name = "SparksCakeWalk", description = "Picks up sclieces of cake from birthday cake in Varrock Square.", version = 1.3)
 public class SparksCakeWalk extends Script implements Painting,
 		InventoryListener {
 
@@ -231,7 +231,7 @@ public class SparksCakeWalk extends Script implements Painting,
 		g.drawRoundRect(11, 348, 483, 108, 16, 16);
 		g.setFont(font1);
 		g.setColor(color3);
-		g.drawString("§parksCakeGather", 16, 375);
+		g.drawString("Â§parksCakeGather", 16, 375);
 		g.setColor(color4);
 		g.fillOval(471, 357, 17, 17);
 		g.setColor(color2);
@@ -242,7 +242,7 @@ public class SparksCakeWalk extends Script implements Painting,
 		g.drawString("Cake per/h:" + cakesPerHour, 267, 413);
 		g.drawString("Run Time: " + Timing.msToString(timeRan), 20, 446);
 		g.setFont(font3);
-		g.drawString("Version: 1.2", 422, 451);
+		g.drawString("Version: 1.3", 422, 451);
 
 	}
 
