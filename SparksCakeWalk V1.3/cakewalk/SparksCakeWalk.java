@@ -9,13 +9,11 @@ import org.tribot.api.General;
 import org.tribot.api.types.generic.Condition;
 import org.tribot.api2007.Banking;
 import org.tribot.api2007.Inventory;
-import org.tribot.api2007.NPCs;
 import org.tribot.api2007.Objects;
 import org.tribot.api2007.Player;
 import org.tribot.api2007.Walking;
 import org.tribot.api2007.WebWalking;
 import org.tribot.api2007.types.RSItemDefinition;
-import org.tribot.api2007.types.RSNPC;
 import org.tribot.api2007.types.RSObject;
 import org.tribot.api2007.types.RSTile;
 import org.tribot.script.Script;
@@ -24,22 +22,17 @@ import org.tribot.script.ScriptManifest;
 import scripts.InventoryListener.InventoryListener;
 import scripts.InventoryListener.InventoryObserver;
 
-@ScriptManifest(authors = { "§park" }, category = "Tools", name = "SparksCakeWalk", description = "Picks up sclieces of cake from birthday cake in Varrock Square.", version = 1.2)
+@ScriptManifest(authors = { "§park" }, category = "Tools", name = "SparksCakeWalk", description = "Picks up sclieces of cake from birthday cake in Varrock Square.", version = 1.3)
 public class SparksCakeWalk extends Script implements Painting,
 		InventoryListener {
 
 	RSTile cake_tile = null;
 
-	private boolean isInBank() {
-		final RSObject[] bank = Objects.findNearest(40, "Bank booth");
-		if (bank.length > 1) {
-			if (bank[0].isOnScreen())
+	private boolean isInBank() { 
+		if(Banking.isInBank()){
 				return true;
 		}
-		final RSNPC[] bankers = NPCs.findNearest("Banker");
-		if (bankers.length < 1)
-			return false;
-		return bankers[0].isOnScreen();
+		return false;
 	}
 
 	private boolean isAtCake() {
@@ -228,6 +221,7 @@ public class SparksCakeWalk extends Script implements Painting,
 
 	public void onPaint(Graphics g1) {
 		long timeRan = System.currentTimeMillis() - startTime;
+		long cakesPerHour = (cakesGained * 3600000 / timeRan);
 		Graphics2D g = (Graphics2D) g1;
 
 		g.setColor(color1);
@@ -245,7 +239,7 @@ public class SparksCakeWalk extends Script implements Painting,
 		g.setFont(font2);
 		g.setColor(color3);
 		g.drawString("Cake Gathered:" + cakesGained, 21, 414);
-		// g.drawString("Cake per/h:" , 267, 413);
+		g.drawString("Cake per/h:" + cakesPerHour, 267, 413);
 		g.drawString("Run Time: " + Timing.msToString(timeRan), 20, 446);
 		g.setFont(font3);
 		g.drawString("Version: 1.2", 422, 451);
